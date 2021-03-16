@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <math.h>
 
 int main(int argc, char *argv[]){
     int n;
@@ -15,13 +16,40 @@ int main(int argc, char *argv[]){
         scanf("%d",&numbers[i]);
     }
     int *inverso = malloc(n * sizeof(int));
-    int j = 10;
+    int *temp;
+    int aux;
+    double j;
+    int count;
+    int k;
     for(i = 0; i < n; i++){
-        while (numbers[i] / j != 0){
-            numbers[i] 
+        count = 0;
+        aux = numbers[i];
+        while(aux != 0){
+            count++;
+            aux /= 10;
         }
-        
-        printf("%d\n",numbers[i] / 100);
+        temp = malloc(count * sizeof(int));
+        k = 0;
+        aux = numbers[i];
+        inverso[i] = 0;
+        while (aux != 0){
+            temp[k] = aux % 10;
+            aux /= 10;
+            k++;
+        }
+        j = count -1;
+        for(k = 0; k < count; k++){
+            inverso[i] += temp[k] * pow(10,j);
+            j--;
+        }
+        if(inverso[i] == numbers[i]){
+            printf("yes ");
+        } else{
+            printf("no ");
+        }
+        free(temp);
     }
+    free(numbers);
+    free(inverso);
     return 0;
 }
