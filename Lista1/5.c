@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
 int base4(int num);
 
@@ -59,7 +58,7 @@ int base4(int num) {
     i++;
     resto[i] = quociente;
 
-    for (; i >= 0; i--)
+    for (; i >= 0; i--){
         if (resto[i] < 4 && num >= 4) {
             switch (resto[i]) {
                 case 1:
@@ -75,10 +74,8 @@ int base4(int num) {
                     printf("A");
                     break;
             }
-        } else {
-            printf("%d", resto[i]);
         }
-
+    }
     printf("\n");
     return 0;
 }
