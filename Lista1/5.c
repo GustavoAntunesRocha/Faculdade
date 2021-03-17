@@ -1,78 +1,84 @@
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
-int main(int argc, char *argv[]){
+int base4(int num);
+
+int main(int argc, char *argv[]) {
     int n;
-    int *numeros;
-    char **base4;
-    int aux = 10;
-    scanf("%d",&n);
-    numeros = malloc(n * sizeof(int));
-    base4 = malloc(n * sizeof(char *));
     int i;
-    //char *temp;
-    int count;
-    for(i = 0; i < n; i++){
-        scanf("%d",&numeros[i]);
-        count = 0;
-        aux = numeros[i];
-        while(aux != 0){
-            count++;
-            aux /= 10;
-        }
-        base4[i] = malloc((count = 1) * sizeof(char));
-        if(numeros[i] < 4){
-            if(numeros[i] % 4 == 0){
-                base4[i]  = "A";
-            }
-            if(numeros[i] % 4 == 1){
-                base4[i] = "C";
-            }if(numeros[i] % 4 == 2){
-                base4[i] = "G";
-            }if(numeros[i] % 4 == 3){
-                base4[i] = "T";
-            }
-        }
-        else{
-            char temp[count+1];
-            //temp = malloc((count + 1) * sizeof(char));
-            for(aux = count -1; aux > 0; aux--){
-                printf("Etapa 1\n");
-                if(numeros[i] % 4 == 0){
-                    temp[aux] += 'A';
-                    numeros[i] /= 4;
-                }
-                if(numeros[i] % 4 == 1){
-                    temp[aux] += 'C';
-                    numeros[i] /= 4;
-                }
-                if(numeros[i] % 4 == 2){
-                    temp[aux] = 'G';
-                    numeros[i] /= 4;
-                }
-                if(numeros[i] % 4 == 3){
-                    temp[aux] = 'T';
-                    numeros[i] /= 4;
-                }
-                if(numeros[i] / 4 == 1){
-                    temp[aux] == 'C';
-                }
-                if(numeros[i] / 4 == 2){
-                    temp[aux] == 'G';
-                }
-                if(numeros[i] / 4 == 3){
-                    temp[aux] == 'T';
-                }
-            }
-            for(aux = 1; aux < count; aux++){
-                //printf("%s", &temp[aux]);
-                strcat(temp[aux], base4[i]);
-                //base4[i] += temp[aux];
-            }
-        }
+    int *numeros;
+    scanf("%d", &n);
+    numeros = malloc(n * sizeof(int));
+    for (i = 0; i < n; i++) {
+        scanf("%d", &numeros[i]);
     }
-    for(i = 0; i < n; i++){
-        printf("\n%s",base4[i]);
+    for (i = 0; i < n; i++) {
+        base4(numeros[i]);
     }
+    return 0;
+}
+
+int base4(int num) {
+    if (num < 4) {
+        switch (num) {
+            case 1:
+                printf("C");
+                printf("\n");
+                break;
+            case 2:
+                printf("G");
+                printf("\n");
+                break;
+            case 3:
+                printf("T");
+                printf("\n");
+                break;
+            case 0:
+                printf("A");
+                printf("\n");
+                break;
+        }
+        return 0;
+    }
+    int i, j;
+    int quociente;
+
+    i = 0;
+
+    int resto[i];
+
+    quociente = num / 4;
+    resto[i] = num % 4;
+
+    while (quociente >= 4) {
+        i++;
+        resto[i] = quociente % 4;
+        quociente = quociente / 4;
+    }
+    i++;
+    resto[i] = quociente;
+
+    for (; i >= 0; i--)
+        if (resto[i] < 4 && num >= 4) {
+            switch (resto[i]) {
+                case 1:
+                    printf("C");
+                    break;
+                case 2:
+                    printf("G");
+                    break;
+                case 3:
+                    printf("T");
+                    break;
+                case 0:
+                    printf("A");
+                    break;
+            }
+        } else {
+            printf("%d", resto[i]);
+        }
+
+    printf("\n");
+    return 0;
 }
