@@ -1,16 +1,19 @@
 #include <stdio.h>
-
 int reverso(int n){
-    if(n / 10 == 0){
+    if(n == 0){
         return n;
     }
     else{
-        
+        if(n % 10 != 0){
+            printf("%d",n % 10);
+        }
+        return reverso(n / 10);
     }
 }
+
 int main(){
-    int n;
+    int n, i;
     scanf("%d",&n);
-    printf("%d",reverso(n));
+    reverso(n);
     return 0;
 }
