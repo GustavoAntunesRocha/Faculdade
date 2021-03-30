@@ -9,23 +9,23 @@ typedef struct {
 } Conjunto;
 
 int criaConjunto(Conjunto *C);
-int conjuntoVazio(C);
-int insereElementoConjunto(x, C);
-int excluirElementoConjunto(x, C);
-int tamanhoConjunto(C);
-int maior(x, C);
-int menor(x, C);
-int pertenceConjunto(x, C);
-int conjuntosIdenticos(C1, C2);
-int subconjunto(C1, C2);
-Conjunto complemento(C1, C2);
-Conjunto uniao(C1, C2);
-Conjunto interseccao(C1, C2);
-Conjunto diferenca(C1, C2);
-Conjunto conjuntoPartes(C);
-void mostraConjunto(C, ordem);
-int copiarConjunto(C1, C2);
-int destroiConjunto(C);
+int conjuntoVazio(Conjunto *C);
+int insereElementoConjunto(elem x, Conjunto *C);
+int excluirElementoConjunto(elem x, Conjunto *C);
+int tamanhoConjunto(Conjunto *C);
+int maior(elem x, Conjunto *C);
+int menor(elem x, Conjunto *C);
+int pertenceConjunto(elem x, Conjunto *C);
+int conjuntosIdenticos(Conjunto *C1, Conjunto *C2);
+int subconjunto(Conjunto *C1, Conjunto *C2);
+Conjunto* complemento(Conjunto *C1, Conjunto *C2);
+Conjunto* uniao(Conjunto *C1, Conjunto *C2);
+Conjunto* interseccao(Conjunto *C1, Conjunto *C2);
+Conjunto* diferenca(Conjunto *C1, Conjunto *C2);
+Conjunto* conjuntoPartes(Conjunto *C);
+void mostraConjunto(Conjunto *C, char *ordem);
+int copiarConjunto(Conjunto *C1, Conjunto *C2);
+int destroiConjunto(Conjunto *C);
 
 int criaConjunto(Conjunto *C){
     C = malloc(sizeof(Conjunto));
@@ -127,4 +127,80 @@ int conjuntosIdenticos(Conjunto *C1,Conjunto *C2){
         }
     }
     return 1;
+}
+
+int subconjunto(Conjunto *C1, Conjunto* C2){
+    int i;
+    for(i = 0; i < C1->proximo; i++){
+        if(!pertenceConjunto(C1->v[i], C2) ){
+            return 0;
+        }
+    }
+    return 1;
+}
+
+Conjunto* complemento(Conjunto *C1, Conjunto *C2){
+    Conjunto *C3;
+    criaConjunto(C3);
+    if(subconjunto(C2, C1) == 0){
+        C3 = NULL;
+        return C3;
+    }
+    int i;
+    for(i = 0; i < C2->proximo; i++){
+        if(!pertenceConjunto(C2->v[i], C1)){
+            C3->v[C3->proximo] = C2->v[i];
+            C3->proximo ++;
+        }
+    }
+    return C3;
+}
+
+Conjunto* uniao(Conjunto *C1, Conjunto *C2){
+    Conjunto *C3;
+    criaConjunto(C3);
+    int i;
+    for(i = 0; i < C1->proximo; i++){
+        C3->v[C3->proximo] = C1->v[i];
+        C3->proximo ++;
+    }
+    for(i = 0; i < C2->proximo; i++){
+        C3->v[C3->proximo] = C2->v[i];
+        C3->proximo ++;
+    }
+    return C3;
+}
+
+Conjunto* interseccao(Conjunto *C1, Conjunto *C2){
+    Conjunto *C3;
+    criaConjunto(C3);
+    if(subconjunto(C2, C1) == 0){
+        C3 = NULL;
+        return C3;
+    }
+    int i;
+    for(i = 0; i < C1->proximo; i++){
+        if(pertenceConjunto(C1->v[i], C2)){
+            C3->v[C3->proximo] = C1->v[i];
+            C3->proximo ++;
+        }
+    }
+    return C3;
+}
+
+Conjunto* diferenca(Conjunto *C1, Conjunto *C2){
+    Conjunto *C3;
+    criaConjunto(C3);
+    if(subconjunto(C1, C1) == 0){
+        C3 = NULL;
+        return C3;
+    }
+    int i;
+    for(i = 0; i < C1->proximo; i++){
+        if(!pertenceConjunto(C1->v[i], C2)){
+            C3->v[C3->proximo] = C1->v[i];
+            C3->proximo ++;
+        }
+    }
+    return C3;
 }
