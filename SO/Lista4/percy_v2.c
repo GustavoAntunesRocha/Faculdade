@@ -1,36 +1,40 @@
 #include <stdio.h>
 #include <unistd.h>
+#include <fcntl.h>
 #include <sys/types.h>
 #include <string.h>
 #include <sys/wait.h>
 #include <stdlib.h>
 #include <semaphore.h>
+#include <pthread.h>
 
 #define BUFFER_SIZE 100
 #define READ_END 0
 #define WRITE_END 1
 
-sem_t S;
+const char * semaphore_name = "q2";
 
 int main(void)
 {
-    sem_init(&S, 0, 0);
+    sem_t *S;
     int fd[2];
     char write_pid[BUFFER_SIZE];
     char read_pid[BUFFER_SIZE];
     pid_t pid;
-    
+
+    /* create the pipe */
+    if (pipe(fd) == -1)
+    {
+        fprintf(stderr, "Pipe failed");
+        return 1;
+    }
+
     while (1)
     {
-        /* create the pipe */
-        if (pipe(fd) == -1)
-        {
-            fprintf(stderr, "Pipe failed");
-            return 1;
-        }
         char comando = getchar();
         if (comando == 'w')
         {
+            scanf("%c");
             pid = fork();
             if (pid < 0)
             {
@@ -39,39 +43,40 @@ int main(void)
             }
             else if (pid > 0)
             {
-                
-                close(fd[WRITE_END]);
-                read(fd[READ_END], read_pid, BUFFER_SIZE);
-                
-                printf("perseverance@MAIN$ MAIN PID %d - Criando SUBSYS1 PID %s\n",getpid(),read_pid);
-                
-                sem_post(&S); //Semáforo libera
+                //cria semáforo compartilhado
+                S  = sem_open(semaphore_name, O_CREAT, 0600, 0);
 
-                close(fd[READ_END]);
+                read(fd[READ_END], read_pid, BUFFER_SIZE);
+
+                printf("perseverance@MAIN$ MAIN PID %d - Criando SUBSYS1 PID %s\n",getpid(),read_pid);
+
+                sem_post(S); //Semáforo libera
+
                 wait(NULL);
                 printf("perseverance@MAIN$ MAIN PID %d - SUBSYS1 PID %s terminou\n",getpid(),read_pid);
             }
-            else 
+            else
             {
-                
-                close(fd[READ_END]);
+
+                S  = sem_open(semaphore_name, O_CREAT, 0600, 0);
 
                 //Concatena pid do filho na string
                 snprintf(write_pid, BUFFER_SIZE, "%s%d", write_pid, (int)getpid());
 
                 write(fd[WRITE_END], write_pid, strlen(write_pid) + 1);
-                
-                //sleep(1);
-                
-                sem_wait(&S); //Semáforo espera
+
+                sem_wait(S); //Semáforo espera
 
                 printf("perseverance@SUBSYS1$ SUBSYS1 PID %d - MOTORES a frente\n", getpid());
                 close(fd[WRITE_END]);
                 execlp("pstree", "pstree", "-p", NULL);
+
+                sem_post(&S);
                 exit(1);
             }
         }
         else if (comando == 's'){
+            scanf("%c");
             pid = fork();
             if (pid < 0)
             {
@@ -80,16 +85,16 @@ int main(void)
             }
             else if (pid > 0)
             {
-                
+
                 close(fd[WRITE_END]);
                 read(fd[READ_END], read_pid, BUFFER_SIZE);
-                
+
                 printf("perseverance@MAIN$ MAIN PID %d - Criando SUBSYS2 PID %s\n",getpid(),read_pid);
                 close(fd[READ_END]);
                 wait(NULL);
                 printf("perseverance@MAIN$ MAIN PID %d - SUBSYS2 PID %s terminou\n",getpid(),read_pid);
             }
-            else 
+            else
             {
                 close(fd[READ_END]);
 
@@ -118,10 +123,12 @@ int main(void)
             }
         }
         else if (comando == 'a'){
+            scanf("%c");
             printf("perseverance@MAIN$ MAIN PID %d - Processos em execução\n",getpid());
             system("ps -ef");
         }
         else if(comando ==  'd'){
+
             printf("perseverance@MAIN$ MAIN PID %d - Abortando missão ...\n",getpid());
             return 0;
         }
