@@ -1,7 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
+#include <string.h>
+
 #define TAM 1000000000
+
 typedef int elem;
 typedef struct {
     elem* v;
@@ -26,6 +29,14 @@ Conjunto* conjuntoPartes(Conjunto *C);
 void mostraConjunto(Conjunto *C, char *ordem);
 int copiarConjunto(Conjunto *C1, Conjunto *C2);
 int destroiConjunto(Conjunto *C);
+
+void quick_sort_crescente(Conjunto *C, int left, int right);
+void quick_sort_decrescente(Conjunto *C, int left, int right);
+
+void main(){
+    int escolha;
+    printf("Escolha uma opção:\n");
+}
 
 int criaConjunto(Conjunto *C){
     C = malloc(sizeof(Conjunto));
@@ -203,4 +214,109 @@ Conjunto* diferenca(Conjunto *C1, Conjunto *C2){
         }
     }
     return C3;
+}
+
+Conjunto* conjuntoPartes(Conjunto *C){
+
+}
+
+void quick_sort_crescente(Conjunto *C, int left, int right) {
+    int i, j, x, y;
+     
+    i = left;
+    j = right;
+    x = C->v[(left + right) / 2];
+     
+    while(i <= j) {
+        while(C->v[i] < x && i < right) {
+            i++;
+        }
+        while(C->v[j] > x && j > left) {
+            j--;
+        }
+        if(i <= j) {
+            y = C->v[i];
+            C->v[i] = C->v[j];
+            C->v[j] = y;
+            i++;
+            j--;
+        }
+    }
+     
+    if(j > left) {
+        quick_sort_crescente(C, left, j);
+    }
+    if(i < right) {
+        quick_sort_crescente(C, i, right);
+    }
+}
+
+void quick_sort_decrescente(Conjunto *C, int left, int right){
+    int i, j, x, y;
+     
+    i = left;
+    j = right;
+    x = C->v[(left + right) / 2];
+     
+    while(i <= j) {
+        while(C->v[i] > x && i < right) {
+            i++;
+        }
+        while(C->v[j] < x && j > left) {
+            j--;
+        }
+        if(i <= j) {
+            y = C->v[i];
+            C->v[i] = C->v[j];
+            C->v[j] = y;
+            i++;
+            j--;
+        }
+    }
+     
+    if(j > left) {
+        quick_sort_decrescente(C, left, j);
+    }
+    if(i < right) {
+        quick_sort_decrescente(C, i, right);
+    }
+}
+
+void mostraConjunto(Conjunto *C, char *ordem){
+    Conjunto *A;
+    criaConjunto(A);
+    A = C;
+    if(strcmp("CRESCENTE", ordem) == 0){
+        quick_sort_crescente(A, 0, A->proximo -1);
+    }
+    else{
+        quick_sort_decrescente(A, 0, A->proximo -1);
+    }
+    int i;
+    for(i = 0; i < A->proximo; i++){
+        printf("%d\n", A->v[i]);
+    }
+}
+
+int copiarConjunto(Conjunto *C1, Conjunto *C2){
+    int i;
+    if(conjuntoVazio(C1)){
+        return 0;
+    }
+    for(i = 0; i < C1->proximo; i++){
+        if(C2->proximo == TAM){
+            return 0;
+        }
+        C2->v[C2->proximo] = C1->v[i];
+        C2->proximo ++;
+    }
+    return 1;
+}
+
+int destroiConjunto(Conjunto *C){
+    if(C == NULL){
+        return 0;
+    }
+    free(C);
+    return 1;
 }
