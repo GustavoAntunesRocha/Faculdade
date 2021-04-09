@@ -39,8 +39,87 @@ void main(){
         printf("Nao foi possivel alocar memoria para o vetor de conjuntos");
         return 0;
     }
-    printf("Escolha uma opção:\n");
+    printf("Digite o numero correspondente a opção desejada:\n");
     printf("1 - Criar um conjunto:\n");
+    printf("2 - Verificar se um conjunto e vazio:\n");
+    printf("3 - Inserir um elemento em um conjunto:\n");
+    printf("4 - Excluir um elemento em um conjunto:\n");
+    printf("5 - Calcular a cardinalidade de um conjunto:\n");
+    printf("6 - Determinar a quantidade de elementos de um conjunto maiores que um numero X:\n");
+    printf("7 - Determinar a quantidade de elementos de um conjunto menores que um numero X:\n");
+    printf("8 - Verificar se um elemento pertence a um conjunto:\n");
+    printf("9 - Comparar se dois conjuntos sao identicos:\n");
+    printf("10 - Identificar se um conjunto e subconjunto de outro:\n");
+    printf("11 - Gerar o complemento de um conjunto em relacao a outro:\n");
+    printf("12 - Gerar a uniao de um conjunto com outro:\n");
+    printf("13 - Gerar a interceccao de um conjunto com outro:\n");
+    printf("14 - Gerar a diferenca entre um conjunto e outro:\n");
+    printf("15 - Gerar o conjunto das partes de um conjunto:\n");
+    printf("16 - Mostrar os elementos presentes em um conjunto:\n");
+    printf("17 - Copiar um conjunto para outro:\n");
+    printf("18 - Excluir um conjunto:\n");
+    scanf("%d",&escolha);
+    switch (escolha)
+    {
+    case 1:
+        
+        break;
+    case 2:
+        
+        break;
+    case 3:
+        
+        break;
+    case 4:
+        
+        break;
+    case 5:
+        
+        break;
+    case 6:
+        
+        break;
+    case 7:
+        
+        break;
+    case 8:
+        
+        break;
+    case 9:
+        
+        break;
+    case 10:
+        
+        break;
+    case 11:
+        
+        break;
+    case 12:
+        
+        break;
+    case 13:
+        
+        break;
+    case 14:
+        
+        break;
+    case 15:
+        
+        break;
+    case 16:
+        
+        break;
+    case 17:
+        
+        break;
+    case 18:
+        
+        break;
+    
+    default:
+        printf("Opcao invalida!\n");
+        break;
+    }
 
 }
 
