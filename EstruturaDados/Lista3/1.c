@@ -3,7 +3,6 @@
 #include <limits.h>
 #include <string.h>
 
-#define TAM 1000000000
 
 typedef int elem;
 typedef struct {
@@ -35,7 +34,14 @@ void quick_sort_decrescente(Conjunto *C, int left, int right);
 
 void main(){
     int escolha;
+    Conjunto *C = malloc(2 * sizeof(Conjunto));
+    if(C == NULL){
+        printf("Nao foi possivel alocar memoria para o vetor de conjuntos");
+        return 0;
+    }
     printf("Escolha uma opção:\n");
+    printf("1 - Criar um conjunto:\n");
+
 }
 
 int criaConjunto(Conjunto *C){
@@ -43,7 +49,7 @@ int criaConjunto(Conjunto *C){
     if(C == NULL){
         return 0;
     }
-    C->v = (int*)malloc( TAM * sizeof(int));
+    C->v = (int*)malloc( 2 * sizeof(int));
     if(C->v == NULL){
         return 0;
     }
@@ -53,7 +59,7 @@ int criaConjunto(Conjunto *C){
 
 int conjuntoVazio(Conjunto *C){
     int i;
-    for(i = 0; i < TAM; i++){
+    for(i = 0; i < C->chave; i++){
         if(C->v != NULL){
             return 0;
         }
@@ -63,6 +69,10 @@ int conjuntoVazio(Conjunto *C){
 
 int insereElementoConjunto(elem x, Conjunto *C){
     if(x >= LONG_MAX || x < 0){
+        return 0;
+    }
+    C->v = (int *)realloc(C->v, (C->chave + 1) * sizeof(int));
+    if(C->v == NULL){
         return 0;
     }
     C->v [C->chave] = x;
@@ -304,9 +314,6 @@ int copiarConjunto(Conjunto *C1, Conjunto *C2){
         return 0;
     }
     for(i = 0; i < C1->chave; i++){
-        if(C2->chave == TAM){
-            return 0;
-        }
         C2->v[C2->chave] = C1->v[i];
         C2->chave ++;
     }
