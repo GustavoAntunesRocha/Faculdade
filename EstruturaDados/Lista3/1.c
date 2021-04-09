@@ -8,7 +8,7 @@
 typedef int elem;
 typedef struct {
     elem* v;
-    elem proximo;
+    elem chave;
 } Conjunto;
 
 int criaConjunto(Conjunto *C);
@@ -47,7 +47,7 @@ int criaConjunto(Conjunto *C){
     if(C->v == NULL){
         return 0;
     }
-    C->proximo = 0;
+    C->chave = 0;
     return 1;
 }
 
@@ -65,8 +65,8 @@ int insereElementoConjunto(elem x, Conjunto *C){
     if(x >= LONG_MAX || x < 0){
         return 0;
     }
-    C->v [C->proximo] = x;
-    C->proximo += 1;
+    C->v [C->chave] = x;
+    C->chave += 1;
     return 1;
 }
 
@@ -76,24 +76,24 @@ int excluirElementoConjunto(elem x, Conjunto *C){
     }
     int i;
     int j;
-    for(i = 0; i < C->proximo; i++){
+    for(i = 0; i < C->chave; i++){
         if(C->v[i] == x){
-            for(j = i; j < C->proximo; j++){
+            for(j = i; j < C->chave; j++){
                 C->v[j] = C->v[j+1];
             }
         }
     }
-    C->proximo -= 1;
+    C->chave -= 1;
     return 1;
 }
 
 int tamanhoConjunto(Conjunto *C){
-    return C->proximo;
+    return C->chave;
 }
 
 int maior(elem x,Conjunto *C){
     int i, aux = 0;
-    for(i = 0; i < C->proximo; i++){
+    for(i = 0; i < C->chave; i++){
         if(C->v > x){
             aux ++;
         }
@@ -106,7 +106,7 @@ int maior(elem x,Conjunto *C){
 
 int menor(elem x,Conjunto *C){
     int i, aux = 0;
-    for(i = 0; i < C->proximo; i++){
+    for(i = 0; i < C->chave; i++){
         if(C->v < x){
             aux ++;
         }
@@ -122,7 +122,7 @@ int pertenceConjunto(elem x, Conjunto *C){
         return 0;
     }
     int i;
-    for(i = 0; i < C->proximo; i++){
+    for(i = 0; i < C->chave; i++){
         if(C->v[i] == x){
             return 1;
         }
@@ -132,7 +132,7 @@ int pertenceConjunto(elem x, Conjunto *C){
 
 int conjuntosIdenticos(Conjunto *C1,Conjunto *C2){
     int i;
-    for(i = 0; i < C1->proximo; i++){
+    for(i = 0; i < C1->chave; i++){
         if(C1->v[i] != C2->v[i]){
             return 0;
         }
@@ -142,7 +142,7 @@ int conjuntosIdenticos(Conjunto *C1,Conjunto *C2){
 
 int subconjunto(Conjunto *C1, Conjunto* C2){
     int i;
-    for(i = 0; i < C1->proximo; i++){
+    for(i = 0; i < C1->chave; i++){
         if(!pertenceConjunto(C1->v[i], C2) ){
             return 0;
         }
@@ -158,10 +158,10 @@ Conjunto* complemento(Conjunto *C1, Conjunto *C2){
         return C3;
     }
     int i;
-    for(i = 0; i < C2->proximo; i++){
+    for(i = 0; i < C2->chave; i++){
         if(!pertenceConjunto(C2->v[i], C1)){
-            C3->v[C3->proximo] = C2->v[i];
-            C3->proximo ++;
+            C3->v[C3->chave] = C2->v[i];
+            C3->chave ++;
         }
     }
     return C3;
@@ -171,13 +171,13 @@ Conjunto* uniao(Conjunto *C1, Conjunto *C2){
     Conjunto *C3;
     criaConjunto(C3);
     int i;
-    for(i = 0; i < C1->proximo; i++){
-        C3->v[C3->proximo] = C1->v[i];
-        C3->proximo ++;
+    for(i = 0; i < C1->chave; i++){
+        C3->v[C3->chave] = C1->v[i];
+        C3->chave ++;
     }
-    for(i = 0; i < C2->proximo; i++){
-        C3->v[C3->proximo] = C2->v[i];
-        C3->proximo ++;
+    for(i = 0; i < C2->chave; i++){
+        C3->v[C3->chave] = C2->v[i];
+        C3->chave ++;
     }
     return C3;
 }
@@ -190,10 +190,10 @@ Conjunto* interseccao(Conjunto *C1, Conjunto *C2){
         return C3;
     }
     int i;
-    for(i = 0; i < C1->proximo; i++){
+    for(i = 0; i < C1->chave; i++){
         if(pertenceConjunto(C1->v[i], C2)){
-            C3->v[C3->proximo] = C1->v[i];
-            C3->proximo ++;
+            C3->v[C3->chave] = C1->v[i];
+            C3->chave ++;
         }
     }
     return C3;
@@ -207,10 +207,10 @@ Conjunto* diferenca(Conjunto *C1, Conjunto *C2){
         return C3;
     }
     int i;
-    for(i = 0; i < C1->proximo; i++){
+    for(i = 0; i < C1->chave; i++){
         if(!pertenceConjunto(C1->v[i], C2)){
-            C3->v[C3->proximo] = C1->v[i];
-            C3->proximo ++;
+            C3->v[C3->chave] = C1->v[i];
+            C3->chave ++;
         }
     }
     return C3;
@@ -287,13 +287,13 @@ void mostraConjunto(Conjunto *C, char *ordem){
     criaConjunto(A);
     A = C;
     if(strcmp("CRESCENTE", ordem) == 0){
-        quick_sort_crescente(A, 0, A->proximo -1);
+        quick_sort_crescente(A, 0, A->chave -1);
     }
     else{
-        quick_sort_decrescente(A, 0, A->proximo -1);
+        quick_sort_decrescente(A, 0, A->chave -1);
     }
     int i;
-    for(i = 0; i < A->proximo; i++){
+    for(i = 0; i < A->chave; i++){
         printf("%d\n", A->v[i]);
     }
 }
@@ -303,12 +303,12 @@ int copiarConjunto(Conjunto *C1, Conjunto *C2){
     if(conjuntoVazio(C1)){
         return 0;
     }
-    for(i = 0; i < C1->proximo; i++){
-        if(C2->proximo == TAM){
+    for(i = 0; i < C1->chave; i++){
+        if(C2->chave == TAM){
             return 0;
         }
-        C2->v[C2->proximo] = C1->v[i];
-        C2->proximo ++;
+        C2->v[C2->chave] = C1->v[i];
+        C2->chave ++;
     }
     return 1;
 }
