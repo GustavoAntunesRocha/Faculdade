@@ -32,9 +32,10 @@ int destroiConjunto(Conjunto *C);
 void quick_sort_crescente(Conjunto *C, int left, int right);
 void quick_sort_decrescente(Conjunto *C, int left, int right);
 
-void main(){
+int main(){
     int escolha;
-    Conjunto *C = malloc(2 * sizeof(Conjunto));
+    Conjunto *C;
+    C = (Conjunto *)malloc(2 * sizeof(Conjunto));
     if(C == NULL){
         printf("Nao foi possivel alocar memoria para o vetor de conjuntos");
         return 0;
@@ -66,10 +67,11 @@ void main(){
     {
     case 0:
         printf("Programa encerrando\n");
+        free(C);
         return 1;
         break;
     case 1:
-        
+        criaConjunto(C);
         break;
     case 2:
         
@@ -128,6 +130,7 @@ void main(){
         break;
     }
     }
+    return 0;
 }
 
 int criaConjunto(Conjunto *C){
