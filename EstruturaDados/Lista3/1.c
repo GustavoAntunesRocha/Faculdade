@@ -39,7 +39,10 @@ void main(){
         printf("Nao foi possivel alocar memoria para o vetor de conjuntos");
         return 0;
     }
+    int i = 0;
+    while(escolha != 0){
     printf("Digite o numero correspondente a opção desejada:\n");
+    printf("0 - Sair do programa:\n");
     printf("1 - Criar um conjunto:\n");
     printf("2 - Verificar se um conjunto e vazio:\n");
     printf("3 - Inserir um elemento em um conjunto:\n");
@@ -61,6 +64,10 @@ void main(){
     scanf("%d",&escolha);
     switch (escolha)
     {
+    case 0:
+        printf("Programa encerrando\n");
+        return 1;
+        break;
     case 1:
         
         break;
@@ -120,7 +127,7 @@ void main(){
         printf("Opcao invalida!\n");
         break;
     }
-
+    }
 }
 
 int criaConjunto(Conjunto *C){
