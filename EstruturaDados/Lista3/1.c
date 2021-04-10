@@ -3,10 +3,11 @@
 #include <limits.h>
 #include <string.h>
 
+#define TAM 1000000
 
 typedef int elem;
 typedef struct {
-    elem* v;
+    elem *v;
     elem chave;
 } Conjunto;
 
@@ -25,22 +26,26 @@ Conjunto* uniao(Conjunto *C1, Conjunto *C2);
 Conjunto* interseccao(Conjunto *C1, Conjunto *C2);
 Conjunto* diferenca(Conjunto *C1, Conjunto *C2);
 Conjunto* conjuntoPartes(Conjunto *C);
-void mostraConjunto(Conjunto *C, char *ordem);
+void mostraConjunto(Conjunto *C, int ordem);
 int copiarConjunto(Conjunto *C1, Conjunto *C2);
 int destroiConjunto(Conjunto *C);
 
 void quick_sort_crescente(Conjunto *C, int left, int right);
 void quick_sort_decrescente(Conjunto *C, int left, int right);
 
+int conjuntoExiste(Conjunto *C , int j);
+
+int i = 0;
+
 int main(){
-    int escolha;
+    int escolha = 1;
     Conjunto *C;
-    C = (Conjunto *)malloc(2 * sizeof(Conjunto));
+    C = malloc(sizeof(Conjunto));
     if(C == NULL){
         printf("Nao foi possivel alocar memoria para o vetor de conjuntos");
         return 0;
     }
-    int i = 0;
+    
     while(escolha != 0){
     printf("Digite o numero correspondente a opção desejada:\n");
     printf("0 - Sair do programa:\n");
@@ -63,6 +68,9 @@ int main(){
     printf("17 - Copiar um conjunto para outro:\n");
     printf("18 - Excluir um conjunto:\n");
     scanf("%d",&escolha);
+    int retorno;
+    int j;
+    int k;
     switch (escolha)
     {
     case 0:
@@ -71,13 +79,75 @@ int main(){
         return 1;
         break;
     case 1:
-        criaConjunto(C);
+        C = realloc(C, (i + 1) * sizeof(Conjunto));
+        if(C == NULL){
+            printf("Nao foi possivel alocar\n");
+            printf("___________________________________________________\n");
+            printf("Pressione qualquer tecla para continuar...");
+            getchar();
+            getchar();
+            printf("\n\n\n\n");
+            break;
+        }
+        retorno = criaConjunto(&C[i]);
+        if(retorno){
+            printf("___________________________________________________\n");
+            printf("Conjunto criado com sucesso!\nID do conjunto: %d\n",i);
+            printf("Pressione qualquer tecla para continuar...");
+            getchar();
+            getchar();
+            i++;
+            printf("\n\n\n\n");
+        }
+        else{
+            printf("Nao foi possivel criar o conjunto\n");
+            printf("Pressione qualquer tecla para continuar...");
+            getchar();
+            getchar();
+            printf("\n\n\n\n");
+        }
         break;
     case 2:
-        
+        printf("___________________________________________________\n");
+        printf("Digite o ID do conjunto: ");
+        scanf("%d",&j);
+        if(conjuntoExiste(&C[j], j) == 0){
+            break;
+        }
+        if(conjuntoVazio(&C[j]) == 0){
+            printf("O conjunto nao esta vazio\n");
+        }
+        else{
+            printf("O conjunto esta vazio\n");
+        }
+        printf("Pressione qualquer tecla para continuar...");
+        getchar();
+        getchar();
+        printf("\n\n\n\n");
         break;
     case 3:
-        
+        printf("___________________________________________________\n");
+        printf("Digite o ID do conjunto: ");
+        scanf("%d",&j);
+        if(conjuntoExiste(&C[j], j) == 0){
+            break;
+        }
+        printf("Digite o numero a ser adicionado no conjunto %d: ",j);
+        scanf("%d",&k);
+        retorno = insereElementoConjunto(k,&C[j]);   
+        if(retorno == 1){
+            printf("Elemento inserido com sucesso!\nPressione qualquer tecla para continuar...");
+            getchar();
+            getchar();
+            printf("\n\n\n\n");
+        }
+        else{
+            printf("Nao foi possivel inserir no conjunto\n");
+            printf("Pressione qualquer tecla para continuar...");
+            getchar();
+            getchar();
+            printf("\n\n\n\n");
+        }
         break;
     case 4:
         
@@ -116,7 +186,22 @@ int main(){
         
         break;
     case 16:
-        
+        printf("___________________________________________________\n");
+        printf("Digite o ID do conjunto: ");
+        scanf("%d",&j);
+        if(conjuntoExiste(&C[j], j) == 0){
+            break;
+        }
+        int ordenacao;
+        printf("Digite a ordem de ordenacao \n1 - CRESCENTE ou  2 - DECRESCENTE: ");
+        scanf("%d",&ordenacao);
+        printf("\nConjunto ordenado:\n");
+        mostraConjunto(&C[j],ordenacao);
+        printf("___________________________________________________\n");
+        printf("Pressione qualquer tecla para continuar...");
+        getchar();
+        getchar();
+        printf("\n\n\n\n");
         break;
     case 17:
         
@@ -131,6 +216,19 @@ int main(){
     }
     }
     return 0;
+}
+
+int conjuntoExiste(Conjunto *C, int j){
+    if (j >= i){
+        printf("Esse conjunto nao existe!\n");
+        printf("___________________________________________________\n");
+        printf("Pressione qualquer tecla para continuar...");
+        getchar();
+        getchar();
+        printf("\n\n\n\n");
+        return 0;
+    }
+    return 1;
 }
 
 int criaConjunto(Conjunto *C){
@@ -157,6 +255,9 @@ int conjuntoVazio(Conjunto *C){
 }
 
 int insereElementoConjunto(elem x, Conjunto *C){
+    if(C == NULL){
+        return 0;
+    }
     if(x >= LONG_MAX || x < 0){
         return 0;
     }
@@ -164,6 +265,7 @@ int insereElementoConjunto(elem x, Conjunto *C){
     if(C->v == NULL){
         return 0;
     }
+    
     C->v [C->chave] = x;
     C->chave += 1;
     return 1;
@@ -193,7 +295,7 @@ int tamanhoConjunto(Conjunto *C){
 int maior(elem x,Conjunto *C){
     int i, aux = 0;
     for(i = 0; i < C->chave; i++){
-        if(C->v > x){
+        if(C->v[i] > x){
             aux ++;
         }
     }
@@ -206,7 +308,7 @@ int maior(elem x,Conjunto *C){
 int menor(elem x,Conjunto *C){
     int i, aux = 0;
     for(i = 0; i < C->chave; i++){
-        if(C->v < x){
+        if(C->v[i] < x){
             aux ++;
         }
     }
@@ -381,11 +483,11 @@ void quick_sort_decrescente(Conjunto *C, int left, int right){
     }
 }
 
-void mostraConjunto(Conjunto *C, char *ordem){
+void mostraConjunto(Conjunto *C, int ordem){
     Conjunto *A;
     criaConjunto(A);
     A = C;
-    if(strcmp("CRESCENTE", ordem) == 0){
+    if(ordem == 1){
         quick_sort_crescente(A, 0, A->chave -1);
     }
     else{
