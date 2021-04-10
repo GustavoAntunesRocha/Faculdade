@@ -150,7 +150,28 @@ int main(){
         }
         break;
     case 4:
-        
+        printf("___________________________________________________\n");
+        printf("Digite o ID do conjunto: ");
+        scanf("%d",&j);
+        if(conjuntoExiste(&C[j], j) == 0){
+            break;
+        }
+        printf("Digite o numero a ser excluido do conjunto %d: ",j);
+        scanf("%d",&k);
+        retorno = excluirElementoConjunto(k,&C[j]);   
+        if(retorno == 1){
+            printf("Elemento excluido com sucesso!\nPressione qualquer tecla para continuar...");
+            getchar();
+            getchar();
+            printf("\n\n\n\n");
+        }
+        else{
+            printf("Nao foi possivel excluir o elemento do conjunto\n");
+            printf("Pressione qualquer tecla para continuar...");
+            getchar();
+            getchar();
+            printf("\n\n\n\n");
+        }
         break;
     case 5:
         
