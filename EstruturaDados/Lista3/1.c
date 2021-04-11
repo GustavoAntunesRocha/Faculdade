@@ -220,7 +220,25 @@ int main(){
         printf("\n\n\n\n");
         break;
     case 8:
-        
+        printf("___________________________________________________\n");
+        printf("Digite o ID do conjunto: ");
+        scanf("%d",&j);
+        if(conjuntoExiste(&C[j], j) == 0){
+            break;
+        }
+        printf("Digite o numero para comparacao: ");
+        scanf("%d",&k);
+        if(pertenceConjunto(k, &C[j]) == 0){
+            printf("O numero %d nao pertence ao conjunto %d\n",k,j);
+        }
+        else{
+            printf("O numero %d pertence ao conjunto %d\n",k,j);
+        }
+        printf("___________________________________________________\n");
+        printf("Pressione qualquer tecla para continuar...");
+        getchar();
+        getchar();
+        printf("\n\n\n\n");
         break;
     case 9:
         
