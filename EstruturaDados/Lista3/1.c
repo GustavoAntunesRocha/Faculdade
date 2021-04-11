@@ -174,7 +174,18 @@ int main(){
         }
         break;
     case 5:
-        
+        printf("___________________________________________________\n");
+        printf("Digite o ID do conjunto: ");
+        scanf("%d",&j);
+        if(conjuntoExiste(&C[j], j) == 0){
+            break;
+        }
+        printf("A cardinalidade do conjunto e: %d\n",tamanhoConjunto(&C[j]));
+        printf("___________________________________________________\n");
+        printf("Pressione qualquer tecla para continuar...");
+        getchar();
+        getchar();
+        printf("\n\n\n\n");
         break;
     case 6:
         
