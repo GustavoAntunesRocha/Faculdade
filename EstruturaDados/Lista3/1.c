@@ -118,7 +118,7 @@ int main(){
             printf("O conjunto nao esta vazio\n");
         }
         else{
-            printf("O conjunto esta vazio\n");
+            printf("O conjunto está vazio\n");
         }
         printf("Pressione qualquer tecla para continuar...");
         getchar();
@@ -289,10 +289,80 @@ int main(){
         printf("\n\n\n\n");
         break;
     case 11:
-        
+        printf("___________________________________________________\n");
+        printf("Digite o ID do primeiro conjunto: ");
+        scanf("%d",&j);
+        if(conjuntoExiste(&C[j], j) == 0){
+            break;
+        }
+        printf("Digite o ID do segundo conjunto: ");
+        scanf("%d",&k);
+        if(conjuntoExiste(&C[k], k) == 0){
+            break;
+        }
+        Conjunto *M;
+        M = malloc(sizeof(Conjunto));
+        retorno = criaConjunto(M);
+        if(retorno == 0){
+            printf("Não foi possivel alocar memória\n");
+            printf("___________________________________________________\n");
+            printf("Pressione qualquer tecla para continuar...");
+            getchar();
+            getchar();
+            printf("\n\n\n\n");
+            break;
+        }
+        M = complemento(&C[j], &C[k]);
+        if(M == NULL){
+            printf("Todos os elementos do conjunto %d estão no conjunto %d\n",k,j);
+            printf("___________________________________________________\n");
+            printf("Pressione qualquer tecla para continuar...");
+            getchar();
+            getchar();
+            printf("\n\n\n\n");
+            free(M);
+            break;
+        }
+        printf("Complemento do conjunto %d em relação ao conjunto %d:\n",j,k);
+        mostraConjunto(M,1);
+        printf("___________________________________________________\n");
+        printf("Pressione qualquer tecla para continuar...");
+        getchar();
+        getchar();
+        printf("\n\n\n\n");
+        free(M);
         break;
     case 12:
-        
+        printf("___________________________________________________\n");
+        printf("Digite o ID do primeiro conjunto: ");
+        scanf("%d",&j);
+        if(conjuntoExiste(&C[j], j) == 0){
+            break;
+        }
+        printf("Digite o ID do segundo conjunto: ");
+        scanf("%d",&k);
+        if(conjuntoExiste(&C[k], k) == 0){
+            break;
+        }
+        M = malloc(sizeof(Conjunto));
+        retorno = criaConjunto(M);
+        if(retorno == 0){
+            printf("Não foi possivel alocar memória\n");
+            printf("___________________________________________________\n");
+            printf("Pressione qualquer tecla para continuar...");
+            getchar();
+            getchar();
+            printf("\n\n\n\n");
+            break;
+        }
+        M = uniao(&C[j], &C[k]);
+        printf("União dos dois conjuntos:\n");
+        mostraConjunto(M,1);
+        printf("___________________________________________________\n");
+        printf("Pressione qualquer tecla para continuar...");
+        getchar();
+        getchar();
+        printf("\n\n\n\n");
         break;
     case 13:
         
@@ -475,13 +545,13 @@ int subconjunto(Conjunto *C1, Conjunto* C2){
 Conjunto* complemento(Conjunto *C1, Conjunto *C2){
     Conjunto *C3;
     criaConjunto(C3);
-    if(subconjunto(C2, C1) == 0){
+    if(subconjunto(C2, C1) == 1){
         C3 = NULL;
         return C3;
     }
     int i;
     for(i = 0; i < C2->chave; i++){
-        if(!pertenceConjunto(C2->v[i], C1)){
+        if(pertenceConjunto(C2->v[i], C1) == 0){
             C3->v[C3->chave] = C2->v[i];
             C3->chave ++;
         }
