@@ -160,13 +160,13 @@ int main(){
         scanf("%d",&k);
         retorno = excluirElementoConjunto(k,&C[j]);   
         if(retorno == 1){
-            printf("Elemento excluido com sucesso!\nPressione qualquer tecla para continuar...");
+            printf("Elemento excluído com sucesso!\nPressione qualquer tecla para continuar...");
             getchar();
             getchar();
             printf("\n\n\n\n");
         }
         else{
-            printf("Nao foi possivel excluir o elemento do conjunto\n");
+            printf("Não foi possivel excluir o elemento do conjunto\n");
             printf("Pressione qualquer tecla para continuar...");
             getchar();
             getchar();
@@ -180,7 +180,7 @@ int main(){
         if(conjuntoExiste(&C[j], j) == 0){
             break;
         }
-        printf("A cardinalidade do conjunto e: %d\n",tamanhoConjunto(&C[j]));
+        printf("A cardinalidade do conjunto é: %d\n",tamanhoConjunto(&C[j]));
         printf("___________________________________________________\n");
         printf("Pressione qualquer tecla para continuar...");
         getchar();
@@ -194,9 +194,9 @@ int main(){
         if(conjuntoExiste(&C[j], j) == 0){
             break;
         }
-        printf("Digite o numero para comparacao: ");
+        printf("Digite o numero para comparação: ");
         scanf("%d",&k);
-        printf("Numero de elementos que sao maiores que %d: %d\n",k,maior(k, &C[j]));
+        printf("Numero de elementos que são maiores que %d: %d\n",k,maior(k, &C[j]));
         printf("___________________________________________________\n");
         printf("Pressione qualquer tecla para continuar...");
         getchar();
@@ -212,7 +212,7 @@ int main(){
         }
         printf("Digite o numero para comparacao: ");
         scanf("%d",&k);
-        printf("Numero de elementos que sao menores que %d: %d\n",k,menor(k, &C[j]));
+        printf("Numero de elementos que são menores que %d: %d\n",k,menor(k, &C[j]));
         printf("___________________________________________________\n");
         printf("Pressione qualquer tecla para continuar...");
         getchar();
@@ -229,7 +229,7 @@ int main(){
         printf("Digite o numero para comparacao: ");
         scanf("%d",&k);
         if(pertenceConjunto(k, &C[j]) == 0){
-            printf("O numero %d nao pertence ao conjunto %d\n",k,j);
+            printf("O numero %d não pertence ao conjunto %d\n",k,j);
         }
         else{
             printf("O numero %d pertence ao conjunto %d\n",k,j);
@@ -253,10 +253,10 @@ int main(){
             break;
         }
         if(conjuntosIdenticos(&C[k], &C[j]) == 0){
-            printf("Os conjuntos nao sao identicos\n");
+            printf("Os conjuntos não são identicos\n");
         }
         else{
-            printf("Os conjuntos sao identicos\n");
+            printf("Os conjuntos são identicos\n");
         }
         printf("___________________________________________________\n");
         printf("Pressione qualquer tecla para continuar...");
@@ -264,9 +264,29 @@ int main(){
         getchar();
         printf("\n\n\n\n");
         break;
-        break;
     case 10:
-        
+        printf("___________________________________________________\n");
+        printf("Digite o ID do primeiro conjunto: ");
+        scanf("%d",&j);
+        if(conjuntoExiste(&C[j], j) == 0){
+            break;
+        }
+        printf("Digite o ID do segundo conjunto: ");
+        scanf("%d",&k);
+        if(conjuntoExiste(&C[k], k) == 0){
+            break;
+        }
+        if(subconjunto(&C[j], &C[k]) == 0){
+            printf("O conjunto %d não e subconjunto do conjunto %d\n",j,k);
+        }
+        else{
+            printf("O conjunto %d é subconjunto do conjunto %d\n",j,k);
+        }
+        printf("___________________________________________________\n");
+        printf("Pressione qualquer tecla para continuar...");
+        getchar();
+        getchar();
+        printf("\n\n\n\n");
         break;
     case 11:
         
@@ -445,7 +465,7 @@ int conjuntosIdenticos(Conjunto *C1,Conjunto *C2){
 int subconjunto(Conjunto *C1, Conjunto* C2){
     int i;
     for(i = 0; i < C1->chave; i++){
-        if(!pertenceConjunto(C1->v[i], C2) ){
+        if(pertenceConjunto(C1->v[i], C2) == 0){
             return 0;
         }
     }
