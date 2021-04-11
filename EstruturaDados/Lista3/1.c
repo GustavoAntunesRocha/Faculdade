@@ -241,7 +241,29 @@ int main(){
         printf("\n\n\n\n");
         break;
     case 9:
-        
+        printf("___________________________________________________\n");
+        printf("Digite o ID do primeiro conjunto: ");
+        scanf("%d",&j);
+        if(conjuntoExiste(&C[j], j) == 0){
+            break;
+        }
+        printf("Digite o ID do segundo conjunto: ");
+        scanf("%d",&k);
+        if(conjuntoExiste(&C[k], k) == 0){
+            break;
+        }
+        if(conjuntosIdenticos(&C[k], &C[j]) == 0){
+            printf("Os conjuntos nao sao identicos\n");
+        }
+        else{
+            printf("Os conjuntos sao identicos\n");
+        }
+        printf("___________________________________________________\n");
+        printf("Pressione qualquer tecla para continuar...");
+        getchar();
+        getchar();
+        printf("\n\n\n\n");
+        break;
         break;
     case 10:
         
@@ -409,6 +431,9 @@ int pertenceConjunto(elem x, Conjunto *C){
 
 int conjuntosIdenticos(Conjunto *C1,Conjunto *C2){
     int i;
+    if(tamanhoConjunto(C1) != tamanhoConjunto(C2)){
+        return 0;
+    }
     for(i = 0; i < C1->chave; i++){
         if(C1->v[i] != C2->v[i]){
             return 0;
