@@ -188,10 +188,36 @@ int main(){
         printf("\n\n\n\n");
         break;
     case 6:
-        
+        printf("___________________________________________________\n");
+        printf("Digite o ID do conjunto: ");
+        scanf("%d",&j);
+        if(conjuntoExiste(&C[j], j) == 0){
+            break;
+        }
+        printf("Digite o numero para comparacao: ");
+        scanf("%d",&k);
+        printf("Numero de elementos que sao maiores que %d: %d\n",k,maior(k, &C[j]));
+        printf("___________________________________________________\n");
+        printf("Pressione qualquer tecla para continuar...");
+        getchar();
+        getchar();
+        printf("\n\n\n\n");
         break;
     case 7:
-        
+        printf("___________________________________________________\n");
+        printf("Digite o ID do conjunto: ");
+        scanf("%d",&j);
+        if(conjuntoExiste(&C[j], j) == 0){
+            break;
+        }
+        printf("Digite o numero para comparacao: ");
+        scanf("%d",&k);
+        printf("Numero de elementos que sao menores que %d: %d\n",k,menor(k, &C[j]));
+        printf("___________________________________________________\n");
+        printf("Pressione qualquer tecla para continuar...");
+        getchar();
+        getchar();
+        printf("\n\n\n\n");
         break;
     case 8:
         
@@ -331,7 +357,7 @@ int maior(elem x,Conjunto *C){
             aux ++;
         }
     }
-    if(tamanhoConjunto(C) == aux){
+    if(tamanhoConjunto(C) == 0){
         return 0;
     }
     return aux;
@@ -344,7 +370,7 @@ int menor(elem x,Conjunto *C){
             aux ++;
         }
     }
-    if(tamanhoConjunto(C) == aux){
+    if(tamanhoConjunto(C) == 0){
         return 0;
     }
     return aux;
