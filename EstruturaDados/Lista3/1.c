@@ -473,10 +473,49 @@ int main(){
         printf("\n\n\n\n");
         break;
     case 17:
-        
+        printf("___________________________________________________\n");
+        printf("Digite o ID do primeiro conjunto: ");
+        scanf("%d",&j);
+        if(conjuntoExiste(&C[j], j) == 0){
+            break;
+        }
+        printf("Digite o ID do segundo conjunto: ");
+        scanf("%d",&k);
+        if(conjuntoExiste(&C[k], k) == 0){
+            break;
+        }
+        int M = copiarConjunto(&C[j], &C[k]);
+        if(M == 0){
+            printf("Falha ao realizar cópia!\n");
+            printf("___________________________________________________\n");
+            printf("Pressione qualquer tecla para continuar...");
+            getchar();
+            getchar();
+            printf("\n\n\n\n");
+            break;
+        }
+        printf("Cópia bem sucedida!\nO conjunto %d agora está assim:\n",k);
+        mostraConjunto(&C[k],1);
+        printf("___________________________________________________\n");
+        printf("Pressione qualquer tecla para continuar...");
+        getchar();
+        getchar();
+        printf("\n\n\n\n");
         break;
     case 18:
-        
+        printf("___________________________________________________\n");
+        printf("Digite o ID do conjunto: ");
+        scanf("%d",&j);
+        if(conjuntoExiste(&C[j], j) == 0){
+            break;
+        }
+        destroiConjunto(&C[j]);
+        printf("Conjunto destruido com sucesso!\n");
+        printf("___________________________________________________\n");
+        printf("Pressione qualquer tecla para continuar...");
+        getchar();
+        getchar();
+        printf("\n\n\n\n");
         break;
     
     default:
