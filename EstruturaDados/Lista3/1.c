@@ -40,6 +40,7 @@ int i = 0;
 int main(){
     int escolha = 1;
     Conjunto *C;
+    Conjunto *M;
     C = malloc(sizeof(Conjunto));
     if(C == NULL){
         printf("Nao foi possivel alocar memoria para o vetor de conjuntos");
@@ -300,7 +301,6 @@ int main(){
         if(conjuntoExiste(&C[k], k) == 0){
             break;
         }
-        Conjunto *M;
         M = malloc(sizeof(Conjunto));
         retorno = criaConjunto(M);
         if(retorno == 0){
@@ -363,9 +363,50 @@ int main(){
         getchar();
         getchar();
         printf("\n\n\n\n");
+        free(M);
         break;
     case 13:
-        
+        printf("___________________________________________________\n");
+        printf("Digite o ID do primeiro conjunto: ");
+        scanf("%d",&j);
+        if(conjuntoExiste(&C[j], j) == 0){
+            break;
+        }
+        printf("Digite o ID do segundo conjunto: ");
+        scanf("%d",&k);
+        if(conjuntoExiste(&C[k], k) == 0){
+            break;
+        }
+        M = malloc(sizeof(Conjunto));
+        retorno = criaConjunto(M);
+        if(retorno == 0){
+            printf("Não foi possivel alocar memória\n");
+            printf("___________________________________________________\n");
+            printf("Pressione qualquer tecla para continuar...");
+            getchar();
+            getchar();
+            printf("\n\n\n\n");
+            break;
+        }
+        M = interseccao(&C[j], &C[k]);
+        if(M == NULL){
+            printf("Não existem elementos em comum entre os conjuntos\n");
+            printf("___________________________________________________\n");
+            printf("Pressione qualquer tecla para continuar...");
+            getchar();
+            getchar();
+            printf("\n\n\n\n");
+            free(M);
+            break;
+        }
+        printf("Intersecção do conjunto %d com o conjunto %d:\n",j,k);
+        mostraConjunto(M,1);
+        printf("___________________________________________________\n");
+        printf("Pressione qualquer tecla para continuar...");
+        getchar();
+        getchar();
+        printf("\n\n\n\n");
+        free(M);
         break;
     case 14:
         
@@ -577,16 +618,17 @@ Conjunto* uniao(Conjunto *C1, Conjunto *C2){
 Conjunto* interseccao(Conjunto *C1, Conjunto *C2){
     Conjunto *C3;
     criaConjunto(C3);
-    if(subconjunto(C2, C1) == 0){
-        C3 = NULL;
-        return C3;
-    }
     int i;
+    printf("Aqui\n");
     for(i = 0; i < C1->chave; i++){
-        if(pertenceConjunto(C1->v[i], C2)){
+        printf("Aqui %d\n",i);
+        if(pertenceConjunto(C1->v[i], C2) == 1){
             C3->v[C3->chave] = C1->v[i];
             C3->chave ++;
         }
+    }
+    if(C3->chave == 0){
+        return NULL;
     }
     return C3;
 }
