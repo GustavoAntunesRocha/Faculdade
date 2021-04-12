@@ -409,7 +409,47 @@ int main(){
         free(M);
         break;
     case 14:
-        
+        printf("___________________________________________________\n");
+        printf("Digite o ID do primeiro conjunto: ");
+        scanf("%d",&j);
+        if(conjuntoExiste(&C[j], j) == 0){
+            break;
+        }
+        printf("Digite o ID do segundo conjunto: ");
+        scanf("%d",&k);
+        if(conjuntoExiste(&C[k], k) == 0){
+            break;
+        }
+        M = malloc(sizeof(Conjunto));
+        retorno = criaConjunto(M);
+        if(retorno == 0){
+            printf("Não foi possivel alocar memória\n");
+            printf("___________________________________________________\n");
+            printf("Pressione qualquer tecla para continuar...");
+            getchar();
+            getchar();
+            printf("\n\n\n\n");
+            break;
+        }
+        M = diferenca(&C[j], &C[k]);
+        if(M == NULL){
+            printf("Todos os elementos do conjunto %d estão no conjunto %d\n",j,k);
+            printf("___________________________________________________\n");
+            printf("Pressione qualquer tecla para continuar...");
+            getchar();
+            getchar();
+            printf("\n\n\n\n");
+            free(M);
+            break;
+        }
+        printf("Diferença do conjunto %d com o conjunto %d:\n",j,k);
+        mostraConjunto(M,1);
+        printf("___________________________________________________\n");
+        printf("Pressione qualquer tecla para continuar...");
+        getchar();
+        getchar();
+        printf("\n\n\n\n");
+        free(M);
         break;
     case 15:
         
@@ -636,16 +676,15 @@ Conjunto* interseccao(Conjunto *C1, Conjunto *C2){
 Conjunto* diferenca(Conjunto *C1, Conjunto *C2){
     Conjunto *C3;
     criaConjunto(C3);
-    if(subconjunto(C1, C1) == 0){
-        C3 = NULL;
-        return C3;
-    }
     int i;
     for(i = 0; i < C1->chave; i++){
-        if(!pertenceConjunto(C1->v[i], C2)){
+        if(pertenceConjunto(C1->v[i], C2) == 0){
             C3->v[C3->chave] = C1->v[i];
             C3->chave ++;
         }
+    }
+    if(C3->chave == 0){
+        return NULL;
     }
     return C3;
 }
