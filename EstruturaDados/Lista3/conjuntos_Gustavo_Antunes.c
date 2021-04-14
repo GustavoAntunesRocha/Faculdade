@@ -1,9 +1,10 @@
+/*Gustavo Antunes Rocha*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
 #include <string.h>
 
-#define TAM 1000000
 
 typedef int elem;
 typedef struct {
