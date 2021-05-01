@@ -71,18 +71,14 @@ int main() {
 void MostraLista(ApontadorDescritor *d) {
     ApontadorCrianca r;
     int i;
-    printf("\n\n");
-    printf("Lista Linear Duplamente Encadeada com Nó Descritor:\n\n");
     if ((*d)->tam == 0) {
         printf("A lista esta VAZIA.\n\n");
     } else {
         r = (*d)->prim;
         for (i = 0; i < (*d)->tam; i++) {
-            printf("[%d, %s, %d] -> ", r->chave, r->nome, r->valor);
+            printf("%s",r->nome);
             r = r->prox;
         }
-        printf("\n");
-        //printf("[%d, %s, %d]\n\n", r->chave, r->nome, r->valor);
     }
 }
 
@@ -149,6 +145,7 @@ int InsFinal(ApontadorDescritor *d, struct Crianca crianca) {
             q->valor = crianca.valor;
             q->prox = (*d)->prim;
             q->ant = (*d)->ult;
+            (*d)->prim->ant = q;
 
             ((*d)->ult)->prox = q;
             (*d)->ult = q;
@@ -182,7 +179,6 @@ int RemInicio(ApontadorDescritor *d) {
 
 int RemFinal(ApontadorDescritor *d) {
     ApontadorCrianca q;
-
     if ((*d)->tam == 0) {
         return (FALHA);
     } else {
@@ -194,6 +190,7 @@ int RemFinal(ApontadorDescritor *d) {
             ((*d)->ult)->prox = (*d)->prim;
             free(q);
             (*d)->tam--;
+            return (SUCESSO);
         }
     }
 }
@@ -206,19 +203,20 @@ int RemValor(ApontadorDescritor *d) {
     } else {
         while ((*d)->tam > 1) {
             r = (*d)->prim;
-            for (i = 0; i < valor; i++) {
-                if (valor % 2 != 0) {
+            r = r->prox;
+            if (valor % 2 != 0) {
+                for (i = 1; i < valor; i++) {
                     r = r->prox;
-                } else {
+                }
+            } else {
+                for (i = 0; i < valor; i++) {
                     r = r->ant;
-                    printf("Criança : %s\n",r->nome);
                 }
             }
-            //printf("Criança a ser removida: %s\n",r->nome);
+            
             valor = r->valor;
             RemChave(d, r->chave);
         }
-
         return (SUCESSO);
     }
 }
