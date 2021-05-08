@@ -1,3 +1,5 @@
+/* Gustavo Antunes Rocha*/
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -14,19 +16,19 @@ struct Nodo {
 
 Apontador prim;
 
-int TamanhoLista(Apontador *d);
+int TamanhoLista();
 
-int CriarListaVazia(Apontador *d) {
-    (*d) = (Apontador)malloc(sizeof(struct Nodo));
-    if ((*d) == NULL) {
+int CriarListaVazia() {
+    prim = (Apontador)malloc(sizeof(struct Nodo));
+    if (prim == NULL) {
         return (FALHA);
     } else {
-        (*d) = (Apontador)NULL;
+        prim = (Apontador)NULL;
         return (SUCESSO);
     }
 }
 
-int InsInicio(Apontador *d, struct Nodo nodo) {
+int InsInicio(struct Nodo nodo) {
     Apontador q;
     q = (Apontador)malloc(sizeof(struct Nodo));
     if (q == NULL) {
@@ -34,13 +36,16 @@ int InsInicio(Apontador *d, struct Nodo nodo) {
     } else {
         q->chave = nodo.chave;
         q->dado = nodo.dado;
-        q->prox = (Apontador)(*d);
-        (*d) = q;
+        q->prox = (Apontador)prim;
+        prim = q;
         return (SUCESSO);
     }
 }
 
-int InsFinal(Apontador *d, struct Nodo nodo) {
+int InsFinal(struct Nodo nodo) {
+    if(prim == NULL){
+        return InsInicio(nodo);
+    }
     Apontador q, r;
     q = (Apontador)malloc(sizeof(struct Nodo));
     if (q == NULL) {
@@ -49,7 +54,7 @@ int InsFinal(Apontador *d, struct Nodo nodo) {
         q->chave = nodo.chave;
         q->dado = nodo.dado;
         q->prox = (Apontador)NULL;
-        r = (*d);
+        r = prim;
         while (r->prox != NULL) {
             r = r->prox;
         }
@@ -58,17 +63,14 @@ int InsFinal(Apontador *d, struct Nodo nodo) {
     }
 }
 
-int TamanhoLista(Apontador *d) {
+int TamanhoLista() {
     Apontador r;
     int tam = 0;
-    if (d == NULL) {
-        return FALHA;
-    }
-    if ((*d) == NULL) {
+    if (prim == NULL) {
         return 0;
     } else {
         tam = 1;
-        r = (*d);
+        r = prim;
         while (r->prox != NULL) {
             tam++;
             r = r->prox;
@@ -77,20 +79,20 @@ int TamanhoLista(Apontador *d) {
     }
 }
 
-int RemoverLista(Apontador *d) {
-    while ((*d)->prox != NULL) {
-        free(*d);
-        (*d) = (*d)->prox;
+int RemoverLista() {
+    while (prim->prox != NULL) {
+        free(prim);
+        prim = prim->prox;
     }
     return SUCESSO;
 }
 
-int MostraLista(Apontador *d) {
+int MostraLista() {
     Apontador r;
-    if (d == NULL) {
+    if (prim == NULL) {
         return FALHA;
     } else {
-        r = (*d);
+        r = prim;
         printf("Imprimindo a lista:\n#---------------------#\n");
         while (r->prox != NULL) {
             printf("[%f]\n", r->dado);
@@ -101,7 +103,7 @@ int MostraLista(Apontador *d) {
         return SUCESSO;
     }
 }
-int InsereMeio(Apontador *d, int chave, float dado) {
+int InsereMeio(int chave, float dado) {
     Apontador q, r;
     struct Nodo node;
     node.chave = chave;
@@ -112,61 +114,111 @@ int InsereMeio(Apontador *d, int chave, float dado) {
     }
     q->chave = chave;
     q->dado = dado;
-    int tam = TamanhoLista(d);
+    int tam = TamanhoLista();
     int i, j = tam / 2;
-    r = (*d);
-    if(tam == 1 || tam = 0){
-        InsInicio(d,node);
+    r = prim;
+    if (tam == 1 || tam == 0) {
+        InsInicio(node);
         return SUCESSO;
     }
     for (i = 0; i < j; i++) {
         r = r->prox;
     }
     q->prox = r;
-    r = (*d);
+    r = prim;
     for (i = 0; i < j - 1; i++) {
         r = r->prox;
     }
     r->prox = q;
     return SUCESSO;
 }
+int RemInicio() {
+    Apontador r;
+    if (prim == NULL) {
+        return FALHA;
+    } else {
+        r = prim;
+        prim = prim->prox;
+        free(r);
+        return SUCESSO;
+    }
+}
+int RemChave(int chave) {
+    Apontador r, q;
+    if (prim == NULL) {
+        return FALHA;
+    } else {
+        int count = 0;
+        r = prim;
+        q = prim;
+        if (r->prox == NULL) {
+            if (r->chave == chave) {
+                RemInicio();
+                return SUCESSO;
+            } else {
+                return FALHA;
+            }
+        } else {
+            if (r->chave == chave) {
+                RemInicio();
+                return SUCESSO;
+            } else {
+                while (r->prox != NULL && r->chave != chave) {
+                    q = r;
+                    r = r->prox;
+                    count++;
+                }
+                if(r->chave == chave){
+                    q->prox = r->prox;
+                    free(r);
+                    return SUCESSO;
+                } else{
+                    return FALHA;
+                }
+            }
+        }
+    }
+}
 int main() {
     Apontador q;
     struct Nodo nodo;
     int chave;
-    CriarListaVazia(&q);
+    CriarListaVazia();
 
     nodo.chave = 0;
     nodo.dado = 45;
-    InsInicio(&q, nodo);
+    InsInicio(nodo);
 
     nodo.chave = 1;
     nodo.dado = 658;
-    InsFinal(&q, nodo);
+    InsFinal(nodo);
 
     nodo.chave = 2;
     nodo.dado = 98745;
-    InsFinal(&q, nodo);
+    InsFinal(nodo);
 
     nodo.chave = 3;
     nodo.dado = 555;
-    InsFinal(&q, nodo);
+    InsFinal(nodo);
 
     nodo.chave = 4;
     nodo.dado = 4333;
-    InsFinal(&q, nodo);
+    InsFinal(nodo);
 
     nodo.chave = 5;
     nodo.dado = 99999;
-    InsFinal(&q, nodo);
+    InsFinal(nodo);
 
     nodo.chave = 6;
     nodo.dado = 77777;
-    InsFinal(&q, nodo);
+    InsFinal(nodo);
 
-    InsereMeio(&q, 7, 99);
+    InsereMeio(7, 99);
 
-    MostraLista(&q);
-    RemoverLista(&q);
+    MostraLista();
+    RemChave(3);
+    printf("Após remover: \n");
+    MostraLista();
+    RemoverLista();
     return 0;
 }
