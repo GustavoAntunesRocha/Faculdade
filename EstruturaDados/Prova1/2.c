@@ -1,0 +1,250 @@
+/*Gustavo Antunes Rocha*/
+
+#include <limits.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define SUCESSO 1
+#define FALHA -1
+#define CHAVE_INVALIDA 0
+
+typedef struct Produto *ApontadorProduto;
+
+typedef struct Descritor *ApontadorDescritor;
+
+struct Descritor {
+    ApontadorProduto prim;
+    int tam;
+    ApontadorProduto ult;
+} Descritor;
+
+struct Produto {
+    ApontadorProduto ant;
+    int codigo;
+    int chave;
+    ApontadorProduto prox;
+} Produto;
+
+int CriarListaVazia(ApontadorDescritor *d);
+int CriarListaChave(ApontadorDescritor *d, struct Produto produto);
+int InsInicio(ApontadorDescritor *d, struct Produto produto);
+int InsFinal(ApontadorDescritor *d, struct Produto produto);
+int InsOrdem(ApontadorDescritor *d, struct Produto produto);
+int RemInicio(ApontadorDescritor *d);
+int RemFinal(ApontadorDescritor *d);
+int RemChave(ApontadorDescritor *d, int chave);
+int TamLista(ApontadorDescritor *d);
+void MostraLista(ApontadorDescritor *d);
+int RemValor(ApontadorDescritor *d);
+
+int main() {
+    int elemLista1 = 0, elemLista2 = 0;
+    while (elemLista1 != -1) {
+        scanf("%d", &elemLista1);
+    }
+    while (elemLista2 != -1) {
+        scanf("%d", &elemLista2);
+    }
+}
+void MostraLista(ApontadorDescritor *d) {
+    ApontadorProduto r;
+    int i;
+    printf("\nLista:\n");
+    if ((*d)->tam == 0) {
+        printf("A lista esta VAZIA.\n\n");
+    } else {
+        r = (*d)->prim;
+        for (i = 0; i < (*d)->tam; i++) {
+            printf("[%d] ->", r->codigo);
+            r = r->prox;
+        }
+        printf("\n");
+    }
+}
+
+int CriarListaVazia(ApontadorDescritor *d) {
+    (*d) = (ApontadorDescritor)malloc(sizeof(struct Descritor));
+    if ((*d) == NULL) {
+        return (FALHA);
+    } else {
+        (*d)->prim = (ApontadorProduto)NULL;
+        (*d)->tam = 0;
+        (*d)->ult = (ApontadorProduto)NULL;
+        return (SUCESSO);
+    }
+}
+
+int CriarListaChave(ApontadorDescritor *d, struct Produto produto) {
+    int intResultado;
+
+    intResultado = CriarListaVazia(d);
+    if (intResultado == FALHA) {
+        return (FALHA);
+    } else {
+        return (InsInicio(d, produto));
+    }
+}
+
+int InsInicio(ApontadorDescritor *d, struct Produto produto) {
+    ApontadorProduto q;
+
+    q = (ApontadorProduto)malloc(sizeof(Produto));
+    if (q == NULL) {
+        return (FALHA);
+    } else {
+        q->chave = produto.chave;
+        q->codigo = produto.codigo;
+        q->ant = (ApontadorProduto)NULL;
+        q->prox = (*d)->prim;
+
+        if ((*d)->tam == 0) {
+            (*d)->prim = q;
+            (*d)->ult = q;
+        } else {
+            ((*d)->prim)->ant = q;
+            (*d)->prim = q;
+        }
+        (*d)->tam++;
+        return (SUCESSO);
+    }
+}
+
+int InsFinal(ApontadorDescritor *d, struct Produto produto) {
+    ApontadorProduto q;
+
+    if ((*d)->tam == 0) {
+        return (InsInicio(d, produto));
+    } else {
+        q = (ApontadorProduto)malloc(sizeof(Produto));
+        if (q == NULL) {
+            return (FALHA);
+        } else {
+            q->chave = produto.chave;
+            q->codigo = produto.codigo;
+            q->prox = (*d)->prim;
+            q->ant = (*d)->ult;
+            (*d)->prim->ant = q;
+
+            ((*d)->ult)->prox = q;
+            (*d)->ult = q;
+            (*d)->tam++;
+
+            return (SUCESSO);
+        }
+    }
+}
+
+int InsOrdem(ApontadorDescritor *d, struct Produto produto) {
+    ApontadorProduto q, r;
+
+    if ((*d)->tam == 0) {
+        return (InsInicio(d, produto));
+    } else {
+        q = (ApontadorProduto)malloc(sizeof(Produto));
+        if (q == NULL) {
+            return (FALHA);
+        } else {
+            q->chave = produto.chave;
+            q->codigo = produto.codigo;
+            r = (*d)->prim;
+            while ((r->codigo < produto.chave) && (r->prox != NULL)) {
+                r = r->prox;
+            }
+            if(r->prox == NULL){
+                return InsFinal(d, produto);
+            }
+            q->prox = r->prox;
+            q->ant = r;
+            r->prox->ant = q;
+            r->prox = q;
+
+            (*d)->prim->ant = q;
+
+            (*d)->tam++;
+
+            return (SUCESSO);
+        }
+    }
+}
+
+int RemInicio(ApontadorDescritor *d) {
+    ApontadorProduto q;
+
+    if ((*d)->tam == 0) {
+        return (FALHA);
+    } else {
+        if ((*d)->tam == 1) {
+            q = (*d)->prim;
+            (*d)->prim = (ApontadorProduto)NULL;
+            (*d)->ult = (ApontadorProduto)NULL;
+        } else {
+            q = (*d)->prim;
+            (*d)->prim = q->prox;
+            ((*d)->prim)->ant = (*d)->ult;
+        }
+        free(q);
+        (*d)->tam--;
+        return (SUCESSO);
+    }
+}
+
+int RemFinal(ApontadorDescritor *d) {
+    ApontadorProduto q;
+    if ((*d)->tam == 0) {
+        return (FALHA);
+    } else {
+        if ((*d)->tam == 1) {
+            return (RemInicio(d));
+        } else {
+            q = (*d)->ult;
+            (*d)->ult = q->ant;
+            ((*d)->ult)->prox = (*d)->prim;
+            free(q);
+            (*d)->tam--;
+            return (SUCESSO);
+        }
+    }
+}
+
+int RemChave(ApontadorDescritor *d, int chave) {
+    ApontadorProduto r;
+
+    if ((*d)->tam == 0) {
+        return (FALHA);
+    } else {
+        if ((*d)->tam == 1) {
+            if (((*d)->prim)->chave == chave) {
+                return (RemInicio(d));
+            } else {
+                return (FALHA);
+            }
+        } else {
+            if (((*d)->prim)->chave == chave) {
+                return (RemInicio(d));
+            } else {
+                if (((*d)->ult)->chave == chave) {
+                    return (RemFinal(d));
+                } else {
+                    r = (*d)->prim;
+                    while ((r->chave != chave) && (r->prox != NULL)) {
+                        r = r->prox;
+                    }
+                    if (r->prox == NULL) {
+                        return (FALHA);
+                    } else {
+                        (r->ant)->prox = r->prox;
+                        (r->prox)->ant = r->ant;
+                        free(r);
+                        (*d)->tam--;
+                        return (SUCESSO);
+                    }
+                }
+            }
+        }
+    }
+}
+
+int TamLista(ApontadorDescritor *d) {
+    return ((*d)->tam);
+}
