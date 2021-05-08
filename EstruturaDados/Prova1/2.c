@@ -39,13 +39,35 @@ void MostraLista(ApontadorDescritor *d);
 int RemValor(ApontadorDescritor *d);
 
 int main() {
-    int elemLista1 = 0, elemLista2 = 0;
+    ApontadorDescritor p1, p2;
+    int chave, codigo;
+    struct Produto produtoAuxiliar;
+    CriarListaVazia(&p1);
+    int elemLista1 = 0, elemLista2 = 0, i = 0;
     while (elemLista1 != -1) {
         scanf("%d", &elemLista1);
+        produtoAuxiliar.chave = i;
+        produtoAuxiliar.codigo = elemLista1;
+        InsOrdem(&p1, produtoAuxiliar);
+        i++;
     }
+    i = 0;
     while (elemLista2 != -1) {
         scanf("%d", &elemLista2);
+        produtoAuxiliar.chave = i;
+        produtoAuxiliar.codigo = elemLista2;
+        InsOrdem(&p2, produtoAuxiliar);
+        i++;
     }
+    printf("\nLista 1: \n");
+    MostraLista(&p1);
+    printf("\nLista 2: \n");
+    MostraLista(&p2);
+
+    free(p1);
+    free(p2);
+    return 1;
+
 }
 void MostraLista(ApontadorDescritor *d) {
     ApontadorProduto r;
