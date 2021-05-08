@@ -18,15 +18,10 @@ int TamanhoLista(Apontador *d);
 
 int CriarListaVazia(Apontador *d) {
     (*d) = (Apontador)malloc(sizeof(struct Nodo));
-    printf("Teste 10\n");
     if ((*d) == NULL) {
         return (FALHA);
     } else {
-        printf("Teste 11\n");
         (*d) = (Apontador)NULL;
-        printf("Teste 12\n");
-        //(*d)->prox = (Apontador)NULL;
-        printf("Teste 13\n");
         return (SUCESSO);
     }
 }
@@ -90,47 +85,88 @@ int RemoverLista(Apontador *d) {
     return SUCESSO;
 }
 
-int MostraLista(Apontador *d){
+int MostraLista(Apontador *d) {
     Apontador r;
     if (d == NULL) {
         return FALHA;
-    } else{
+    } else {
         r = (*d);
-        printf("\n#---------------------#\nImprimindo a lista:\n");
-        while (r->prox != NULL)
-        {
-            printf("[%f]\n",r->dado);
+        printf("Imprimindo a lista:\n#---------------------#\n");
+        while (r->prox != NULL) {
+            printf("[%f]\n", r->dado);
             r = r->prox;
         }
+        printf("[%f]\n", r->dado);
+        printf("#---------------------#\n");
         return SUCESSO;
-        
     }
 }
-
-int main(){
+int InsereMeio(Apontador *d, int chave, float dado) {
+    Apontador q, r;
+    struct Nodo node;
+    node.chave = chave;
+    node.dado = dado;
+    q = (Apontador)malloc(sizeof(struct Nodo));
+    if (q == NULL) {
+        return (FALHA);
+    }
+    q->chave = chave;
+    q->dado = dado;
+    int tam = TamanhoLista(d);
+    int i, j = tam / 2;
+    r = (*d);
+    if(tam == 1){
+        InsInicio(d,node);
+        return SUCESSO;
+    }
+    for (i = 0; i < j; i++) {
+        r = r->prox;
+    }
+    q->prox = r;
+    r = (*d);
+    for (i = 0; i < j - 1; i++) {
+        r = r->prox;
+    }
+    r->prox = q;
+    return SUCESSO;
+}
+int main() {
     Apontador q;
     struct Nodo nodo;
     int chave;
+    CriarListaVazia(&q);
+
     nodo.chave = 0;
     nodo.dado = 45;
-    printf("Teste 1\n");
-    CriarListaVazia(&q);
-    printf("Teste 2\n");
     InsInicio(&q, nodo);
-    printf("Teste 3\n");
+
     nodo.chave = 1;
     nodo.dado = 658;
-    printf("Teste 4\n");
     InsFinal(&q, nodo);
-    printf("Teste 5\n");
+
     nodo.chave = 2;
     nodo.dado = 98745;
-    printf("Teste 6\n");
     InsFinal(&q, nodo);
-    printf("Teste 7\n");
+
+    nodo.chave = 3;
+    nodo.dado = 555;
+    InsFinal(&q, nodo);
+
+    nodo.chave = 4;
+    nodo.dado = 4333;
+    InsFinal(&q, nodo);
+
+    nodo.chave = 5;
+    nodo.dado = 99999;
+    InsFinal(&q, nodo);
+
+    nodo.chave = 6;
+    nodo.dado = 77777;
+    InsFinal(&q, nodo);
+
+    InsereMeio(&q, 7, 99);
+
     MostraLista(&q);
-    printf("Teste 8\n");
     RemoverLista(&q);
-    printf("Teste 9\n");
     return 0;
 }
