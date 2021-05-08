@@ -44,19 +44,30 @@ int main() {
     struct Produto produtoAuxiliar;
     CriarListaVazia(&p1);
     int elemLista1 = 0, elemLista2 = 0, i = 0;
-    while (elemLista1 != -1) {
+    while (1) {
         scanf("%d", &elemLista1);
+        if(elemLista1 == -1){
+            break;
+        }
         produtoAuxiliar.chave = i;
         produtoAuxiliar.codigo = elemLista1;
         InsOrdem(&p1, produtoAuxiliar);
+        printf("\nLista 1: \n");
+        MostraLista(&p1);
         i++;
     }
     i = 0;
-    while (elemLista2 != -1) {
+    CriarListaVazia(&p2);
+    while (1) {
         scanf("%d", &elemLista2);
+        if(elemLista2 == -1){
+            break;
+        }
         produtoAuxiliar.chave = i;
         produtoAuxiliar.codigo = elemLista2;
         InsOrdem(&p2, produtoAuxiliar);
+        printf("\nLista 2: \n");
+        MostraLista(&p2);
         i++;
     }
     printf("\nLista 1: \n");
@@ -175,7 +186,7 @@ int InsOrdem(ApontadorDescritor *d, struct Produto produto) {
             q->chave = produto.chave;
             q->codigo = produto.codigo;
             r = (*d)->prim;
-            while ((r->codigo < produto.codigo)) {
+            while ((r->codigo <= produto.codigo)) {
                 r = r->prox;
             }
             
