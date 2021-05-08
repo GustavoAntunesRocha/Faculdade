@@ -122,9 +122,8 @@ int InsFinal(ApontadorDescritor *d, struct Produto produto) {
         } else {
             q->chave = produto.chave;
             q->codigo = produto.codigo;
-            q->prox = (*d)->prim;
+            q->prox = (ApontadorProduto) NULL;
             q->ant = (*d)->ult;
-            (*d)->prim->ant = q;
 
             ((*d)->ult)->prox = q;
             (*d)->ult = q;
@@ -141,6 +140,12 @@ int InsOrdem(ApontadorDescritor *d, struct Produto produto) {
     if ((*d)->tam == 0) {
         return (InsInicio(d, produto));
     } else {
+        if(produto.codigo < (*d)->prim->codigo){
+            return (InsInicio(d, produto));
+        }
+        if(produto.codigo >= (*d)->ult->codigo){
+            return (InsFinal(d, produto));
+        }
         q = (ApontadorProduto)malloc(sizeof(Produto));
         if (q == NULL) {
             return (FALHA);
@@ -148,18 +153,15 @@ int InsOrdem(ApontadorDescritor *d, struct Produto produto) {
             q->chave = produto.chave;
             q->codigo = produto.codigo;
             r = (*d)->prim;
-            while ((r->codigo < produto.chave) && (r->prox != NULL)) {
+            while ((r->codigo < produto.codigo)) {
                 r = r->prox;
             }
-            if(r->prox == NULL){
-                return InsFinal(d, produto);
-            }
-            q->prox = r->prox;
-            q->ant = r;
-            r->prox->ant = q;
-            r->prox = q;
+            
+            q->prox = r;
+            q->ant = r->ant;
 
-            (*d)->prim->ant = q;
+            r->ant = q;
+            q->ant->prox = q;
 
             (*d)->tam++;
 
@@ -181,7 +183,7 @@ int RemInicio(ApontadorDescritor *d) {
         } else {
             q = (*d)->prim;
             (*d)->prim = q->prox;
-            ((*d)->prim)->ant = (*d)->ult;
+            ((*d)->prim)->ant = (ApontadorProduto)NULL;
         }
         free(q);
         (*d)->tam--;
@@ -199,7 +201,7 @@ int RemFinal(ApontadorDescritor *d) {
         } else {
             q = (*d)->ult;
             (*d)->ult = q->ant;
-            ((*d)->ult)->prox = (*d)->prim;
+            ((*d)->ult)->prox = (ApontadorProduto)NULL;
             free(q);
             (*d)->tam--;
             return (SUCESSO);
