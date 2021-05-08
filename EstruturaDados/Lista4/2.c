@@ -71,14 +71,16 @@ int main() {
 void MostraLista(ApontadorDescritor *d) {
     ApontadorCrianca r;
     int i;
+    printf("\nLista:\n");
     if ((*d)->tam == 0) {
         printf("A lista esta VAZIA.\n\n");
     } else {
         r = (*d)->prim;
         for (i = 0; i < (*d)->tam; i++) {
-            printf("%s",r->nome);
+            printf("[%s] ->",r->nome);
             r = r->prox;
         }
+        printf("\n");
     }
 }
 
@@ -197,25 +199,39 @@ int RemFinal(ApontadorDescritor *d) {
 
 int RemValor(ApontadorDescritor *d) {
     ApontadorCrianca r;
-    int i, valor = (*d)->prim->valor;
+    int i, valor = (*d)->prim->valor, j;
     if ((*d)->tam == 0) {
         return (FALHA);
     } else {
         while ((*d)->tam > 1) {
             r = (*d)->prim;
             r = r->prox;
+            printf("\nValor: %d\n",valor);
             if (valor % 2 != 0) {
+                j = 0;
                 for (i = 1; i < valor; i++) {
+                    if(j % 5 == 0){
+                        printf("\n");
+                    }
+                    j++;
+                    printf("%s, ",r->nome);
                     r = r->prox;
                 }
             } else {
+                j = 0;
                 for (i = 0; i < valor; i++) {
+                    if(j % 5 == 0){
+                        printf("\n");
+                    }
+                    j++;
+                    printf("%s, ",r->nome);
                     r = r->ant;
                 }
             }
-            
+            printf("Criança a ser removida: %s\n",r->nome);
             valor = r->valor;
             RemChave(d, r->chave);
+            MostraLista(d);
         }
         return (SUCESSO);
     }
