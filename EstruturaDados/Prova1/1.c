@@ -115,7 +115,7 @@ int InsereMeio(Apontador *d, int chave, float dado) {
     int tam = TamanhoLista(d);
     int i, j = tam / 2;
     r = (*d);
-    if(tam == 1){
+    if(tam == 1 || tam = 0){
         InsInicio(d,node);
         return SUCESSO;
     }
